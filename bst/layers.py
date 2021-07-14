@@ -90,3 +90,23 @@ class EncoderCell(nn.Module):
         ff_attention = self.ff(attention_out)
         return self.lnorm_2(self.dropout(ff_attention) + attention_out)
 
+
+class Encoder(nn.Module):
+    """
+    Encoder Block with n stacked encoder cells.
+    """
+
+    def __init__(self, input_size, hidden_size, n_layers, n_heads):
+        super().__init__()
+        # Stack of encoder-cells n_layers high
+        self.stack = nn.ModuleList()
+        # Building encoder stack
+        for layer in range(n_layers):
+            self.stack.append(EncoderCell(input_size, hidden_size, n_heads))
+        # Dropout layer
+        self.dropout = nn.Dropout(0.1)
+
+    def forward(self, x, mask=None):
+        for cell in self.stack:
+            x = cell(self.dropout(x), mask)
+        return x
