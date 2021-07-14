@@ -154,3 +154,32 @@ class Model(nn.Module):
         output = self.mlp(torch.cat([agg_encoding, context_embs], dim=1))
         return output, targets
 
+
+
+    def get_mask(self, x):
+        seq_len = x.size(1)
+        mask = (x != 0).unsqueeze(1).byte()
+        triu = (np.triu(np.ones([1, seq_len, seq_len]), k=1) == 0).astype('uint8')
+        if self.config['cuda']:
+            dtype = torch.cuda.ByteTensor
+        else:
+            dtype = torch.ByteTensor
+        return dtype(triu) & dtype(mask)
+
+    @staticmethod
+    def pos_embedding_sinusoidal(max_seq_len, embedding_dim, is_cuda):
+        half_dim = embedding_dim // 2
+        emb = torch.log(torch.tensor(10000)) / (half_dim - 1)
+        emb = torch.exp(torch.arange(half_dim, dtype=torch.float) * -emb)
+        emb = torch.arange(max_seq_len, dtype=torch.float).unsqueeze(
+            1
+        ) * emb.unsqueeze(0)
+        emb = torch.stack((torch.sin(emb), torch.cos(emb)), dim=0).view(
+            max_seq_len, -1).t().contiguous().view(max_seq_len, -1)
+        if embedding_dim % 2 == 1:
+            emb = torch.cat([emb, torch.zeros(max_seq_len, 1)], dim=1)
+        if is_cuda:
+            return emb.cuda()
+        return emb
+
+
