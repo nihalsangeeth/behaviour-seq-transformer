@@ -154,8 +154,6 @@ class Model(nn.Module):
         output = self.mlp(torch.cat([agg_encoding, context_embs], dim=1))
         return output, targets
 
-
-
     def get_mask(self, x):
         seq_len = x.size(1)
         mask = (x != 0).unsqueeze(1).byte()
