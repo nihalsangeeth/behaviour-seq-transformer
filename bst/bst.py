@@ -40,7 +40,7 @@ class BSTransformer(nn.Module):
         targets = x[..., -1:].long()
         enc_mask = self.get_mask(x)
         item_embed = self.item_embed(x.long()) * np.sqrt(self.config['item_embed']['embedding_dim'])
-        agg_encoding = torch.sum(self.encoder(item_embed + self.pos_embedding[:x.size(1), :], mask=enc_mask), dim=1)
+        agg_encoding = torch.mean(self.encoder(item_embed + self.pos_embedding[:x.size(1), :], mask=enc_mask), dim=1)
         context_embs = torch.tensor([]).to(x.device)
         for emb, feat in zip(self.context_embeddings, context):
             context_embs = torch.cat([context_embs, emb(feat)], dim=1)
