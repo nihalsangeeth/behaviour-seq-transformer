@@ -72,4 +72,3 @@ class BSTransformer(nn.Module):
         if is_cuda:
             return emb.cuda()
         return emb
-
