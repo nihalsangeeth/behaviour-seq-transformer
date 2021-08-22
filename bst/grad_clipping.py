@@ -1,4 +1,8 @@
+"""
+From https://github.com/DannyMerkx/next_word_prediction/ .
+"""
 import numpy as np
+
 
 class GradientClipping:
     def __init__(self, clip_value):

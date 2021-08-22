@@ -1,4 +1,3 @@
-import numpy as np
 import torch
 from torch import nn
 
@@ -7,7 +6,6 @@ class FF(nn.Module):
     """
     Feed-forward in a transformer layer.
     """
-
     def __init__(self, input_size, hidden_size):
         super().__init__()
         self.lin_1 = nn.Linear(input_size, hidden_size)
@@ -23,7 +21,6 @@ class MultiHeadAttention(nn.Module):
     """
     Multi-head Attention block in a transformer layer.
     """
-
     def __init__(self, att_dim, n_heads):
         super().__init__()
         # Check for compatible  #Attention Heads
@@ -71,7 +68,6 @@ class EncoderCell(nn.Module):
     Encoder Cell contains MultiHeadAttention > Add & LayerNorm1 >
     Feed Forward > Add & LayerNorm2
     """
-
     def __init__(self, input_size, hidden_size, n_heads):
         super().__init__()
         # Attention Block
@@ -95,7 +91,6 @@ class Encoder(nn.Module):
     """
     Encoder Block with n stacked encoder cells.
     """
-
     def __init__(self, input_size, hidden_size, n_layers, n_heads):
         super().__init__()
         # Stack of encoder-cells n_layers high
@@ -110,4 +105,3 @@ class Encoder(nn.Module):
         for cell in self.stack:
             x = cell(self.dropout(x), mask)
         return x
-

@@ -2,10 +2,14 @@ import torch
 from torch import nn
 import numpy as np
 
-from layers import Encoder
+from bst.layers import Encoder
 
 
 class BSTransformer(nn.Module):
+    """
+    Behaviour Sequence Transformer with dynamic context embeddings
+    and sinusoidal pos-encoding.
+    """
     def __init__(self, config):
         super().__init__()
         self.config = config
@@ -35,6 +39,13 @@ class BSTransformer(nn.Module):
                                  nn.LeakyReLU(),
                                  nn.Linear(1024, config['item_embed']['num_embeddings'])
                                  )
+
+        for param in self.parameters():
+            if param.dim() > 1 and config['init_method'] == 'xavier':
+                torch.nn.init.xavier_uniform_(param)
+            if param.dim() > 1 and config['init_method'] == 'kaiming':
+                torch.nn.init.kaiming_uniform_(param)
+        print(f"Parameters initialised using {config['init_method']} initialisation!")
 
     def forward(self, x, context):
         targets = x[..., -1:].long()

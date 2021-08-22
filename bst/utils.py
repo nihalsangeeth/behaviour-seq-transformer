@@ -1,6 +1,11 @@
+import random
+import numpy as np
+
+
 def pad(seq, max_seq_len, pad_with=0):
     seq_len = len(seq)
     return [pad_with]*(max_seq_len - seq_len) + seq
+
 
 def batch_fn(user_seq, context_features, batch_size, max_seq_len, shuffle=True):
     if shuffle:
