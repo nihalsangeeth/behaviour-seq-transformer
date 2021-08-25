@@ -16,7 +16,9 @@ Recommendation in Alibaba.](https://arxiv.org/pdf/1905.06874.pdf)
 
 2. https://github.com/DannyMerkx/next_word_prediction
 
-
+# WIP
+1. Performance on MovieLens Dataset.
+2. Reduce training speed.
 
 
 
